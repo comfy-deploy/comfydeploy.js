@@ -1,6 +1,6 @@
 {
   "name": "comfydeploy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "",
@@ -15,10 +15,10 @@
     "bun"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/wobsoriano/pkg-name#readme",
+  "homepage": "comfydeploy.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wobsoriano/pkg-name.git"
+    "url": "https://github.com/comfy-deploy/comfydeploy.js"
   },
   "bugs": "https://github.com/comfy-deploy/comfydeploy.js/issues",
   "author": "Comfy Deploy",
