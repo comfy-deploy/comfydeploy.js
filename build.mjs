@@ -5,5 +5,6 @@ await Bun.build({
   outdir: './dist',
   minify: true,
   target: "node",
+  format: "esm",
   plugins: [dts()],
 })
