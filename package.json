@@ -1,6 +1,6 @@
 {
-  "name": "pkg-name",
-  "version": "0.0.0",
+  "name": "comfydeploy",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "",
@@ -20,11 +20,14 @@
     "type": "git",
     "url": "git+https://github.com/wobsoriano/pkg-name.git"
   },
-  "bugs": "https://github.com/wobsoriano/pkg-name/issues",
-  "author": "Robert Soriano <sorianorobertc@gmail.com>",
+  "bugs": "https://github.com/comfy-deploy/comfydeploy.js/issues",
+  "author": "Comfy Deploy",
   "devDependencies": {
     "bun-plugin-dts": "^0.2.1",
     "@types/bun": "^1.0.0",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
   }
 }
