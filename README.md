@@ -1,4 +1,6 @@
-# bun starter
+# Comfy Deploy
+
+This is the official node SDk for [Comfy deploy](https://www.comfydeploy.com/)
 
 ## Getting Started
 
