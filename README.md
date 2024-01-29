@@ -4,17 +4,14 @@ This is the official node SDk for [Comfy deploy](https://www.comfydeploy.com/)
 
 ## Getting Started
 
-```
-bun add comfydeploy
-```
-```
+```bash
 npm i comfydeploy
-```
-```
+# or
 yarn add comfydeploy
-```
-```
+# or
 pnpm i comfydeploy
+# or
+bun add comfydeploy
 ```
 
 ## Docs
