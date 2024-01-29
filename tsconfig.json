@@ -11,7 +11,9 @@
     "allowJs": true,
     "noEmit": true,
     "outDir": "dist",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
   },
   "exclude": ["node_modules"]
 }
