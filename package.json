@@ -6,7 +6,7 @@
   "type": "module",
   "description": "comfydeploy.com node SDk",
   "scripts": {
-    "build": "tsup src/index.ts ./dst",
+    "build": "tsup src/index.ts ./dst --dts",
     "bun-build": "bun run build.mjs",
     "prepublishOnly": "bun run build"
   },
