@@ -6,7 +6,8 @@
   "type": "module",
   "description": "comfydeploy.com node SDk",
   "scripts": {
-    "build": "bun run build.mjs",
+    "build": "tsup src/index.ts ./dst",
+    "bun-build": "bun run build.mjs",
     "prepublishOnly": "bun run build"
   },
   "files": [
@@ -27,8 +28,9 @@
   "bugs": "https://github.com/comfy-deploy/comfydeploy.js/issues",
   "author": "Comfy Deploy",
   "devDependencies": {
-    "bun-plugin-dts": "^0.2.1",
     "@types/bun": "^1.0.0",
+    "bun-plugin-dts": "^0.2.1",
+    "tsup": "^8.0.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
