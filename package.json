@@ -1,14 +1,14 @@
 {
   "name": "comfydeploy",
   "version": "0.0.9",
-  "exports": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "description": "comfydeploy.com node SDk",
   "scripts": {
-    "build": "tsup src/index.ts ./dst --dts",
+    "build": "tsup src/index.ts --format esm --dts --outDir dist",
     "bun-build": "bun run build.mjs",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
