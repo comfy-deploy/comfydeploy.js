@@ -6,7 +6,16 @@ const runTypes = z.object({
 
 const runOutputTypes = z.object({
   id: z.string(),
-  status: z.enum(["success", "failed", "running", "uploading", "not-started"]),
+  status: z.enum([
+    "not-started",
+    "running",
+    "uploading",
+    "success",
+    "failed",
+    "started",
+    "queued",
+    "timeout",
+  ]),
   outputs: z.array(
     z.object({
       data: z.any(),
@@ -51,11 +60,13 @@ export class ComfyDeployClient {
       cache: "no-store",
     })
       .then((response) => {
-        console.log('response', response)
-        return response.json()})
+        // console.log('response', response)
+        return response.json()
+      })
       .then((json) => {
-        console.log('json', json)
-        return runTypes.parse(json)})
+        // console.log('json', json)
+        return runTypes.parse(json)
+      })
       .catch((err) => {
         console.error('err', err);
         return null;
