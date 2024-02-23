@@ -31,6 +31,12 @@ const uploadFileTypes = z.object({
   download_url: z.string(),
 });
 
+const getWebsocketTypes = z.object({
+  ws_connection_url: z.string(),
+  auth_token: z.string(),
+  get_workflow_endpoint_url: z.string(),
+})
+
 export class ComfyDeployClient {
   apiBase: string = "https://www.comfydeploy.com/api";
   apiToken: string;
@@ -138,6 +144,25 @@ export class ComfyDeployClient {
     })
       .then((response) => response.json())
       .then((json) => uploadFileTypes.parse(json))
+      .catch((err) => {
+        console.error(err);
+        return null;
+      });
+  }
+
+  async getWebsocketUrl({ deployment_id }: { deployment_id: string; }) {
+    const url = new URL(`${this.apiBase}/streaming/${deployment_id}`);
+    console.log(url.href);
+    
+    return await fetch(url.href, {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${this.apiToken}`,
+      },
+      cache: "no-store",
+    })
+      .then((response) => response.json())
+      .then((json) => getWebsocketTypes.parse(json))
       .catch((err) => {
         console.error(err);
         return null;
