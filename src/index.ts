@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 const runTypes = z.object({
   run_id: z.string(),
@@ -21,6 +21,8 @@ const runOutputTypes = z.object({
       data: z.any(),
     }),
   ),
+  live_status: z.string().optional(),
+  progress: number().default(0)
 });
 
 const uploadFileTypes = z.object({
