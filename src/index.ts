@@ -33,8 +33,8 @@ const uploadFileTypes = z.object({
 
 const getWebsocketTypes = z.object({
   ws_connection_url: z.string(),
-  auth_token: z.string(),
-  get_workflow_endpoint_url: z.string(),
+  // auth_token: z.string(),
+  // get_workflow_endpoint_url: z.string(),
 })
 
 export class ComfyDeployClient {
@@ -151,8 +151,7 @@ export class ComfyDeployClient {
   }
 
   async getWebsocketUrl({ deployment_id }: { deployment_id: string; }) {
-    const url = new URL(`${this.apiBase}/streaming/${deployment_id}`);
-    console.log(url.href);
+    const url = new URL(`${this.apiBase}/websocket/${deployment_id}`);
     
     return await fetch(url.href, {
       method: "GET",
