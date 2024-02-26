@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --outDir dist",
     "bun-build": "bun run build.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm version patch && npm run build"
   },
   "files": [
     "dist"
