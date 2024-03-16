@@ -21,7 +21,7 @@ const runOutputTypes = z.object({
       data: z.any(),
     }),
   ),
-  live_status: z.string().optional(),
+  live_status: z.string().optional().nullable(),
   progress: number().default(0)
 });
 
