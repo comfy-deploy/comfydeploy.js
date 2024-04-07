@@ -51,9 +51,11 @@ export class ComfyDeployClient {
   async run({
     deployment_id,
     inputs,
+    webhook,
   }: {
     deployment_id: string;
     inputs?: Record<string, string>;
+    webhook?: string;
   }) {
     return fetch(`${this.apiBase}/run`, {
       method: "POST",
@@ -64,6 +66,7 @@ export class ComfyDeployClient {
       body: JSON.stringify({
         deployment_id: deployment_id,
         inputs: inputs,
+        webhook: webhook,
       }),
       cache: "no-store",
     })
@@ -101,6 +104,7 @@ export class ComfyDeployClient {
   async runSync(props: {
     deployment_id: string;
     inputs?: Record<string, string>;
+    webhook?: string;
   }) {
     const runResult = await this.run(props);
     if (!runResult) return null;
