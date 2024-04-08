@@ -16,15 +16,18 @@ const status = z.enum([
   "timeout",
 ])
 
+const runOutputs = z.array(z.object({
+  data: z.object({
+    images: z.array(OutputFileType).optional(),
+    files: z.array(OutputFileType).optional(),
+    gifs: z.array(OutputFileType).optional(),
+  })
+}))
 
 export const WebookRequestBody = z.object({
   status: status,
   run_id: z.string(),
-  data: z.array(z.object({
-    images: z.array(OutputFileType).optional(),
-    files: z.array(OutputFileType).optional(),
-    gifs: z.array(OutputFileType).optional(),
-  })),
+  outputs: runOutputs,
 });
 
 export async function parseWebhookDataSafe(
@@ -87,11 +90,7 @@ const runTypes = z.object({
 const runOutputTypes = z.object({
   id: z.string(),
   status: status,
-  outputs: z.array(
-    z.object({
-      data: z.any(),
-    }),
-  ),
+  outputs: runOutputs,
   live_status: z.string().optional().nullable(),
   progress: number().default(0)
 });
