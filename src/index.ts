@@ -1,21 +1,92 @@
-import { number, z } from "zod";
+import { ZodError, ZodType, number, z } from "zod";
+
+export const OutputFileType = z.object({
+  url: z.string(),
+  filename: z.string(),
+})
+
+const status = z.enum([
+  "not-started",
+  "running",
+  "uploading",
+  "success",
+  "failed",
+  "started",
+  "queued",
+  "timeout",
+])
+
+
+export const WebookRequestBody = z.object({
+  status: status,
+  run_id: z.string(),
+  data: z.array(z.object({
+    images: z.array(OutputFileType).optional(),
+    files: z.array(OutputFileType).optional(),
+    gifs: z.array(OutputFileType).optional(),
+  })),
+});
+
+export async function parseWebhookDataSafe(
+  request: Request,
+  headers?: HeadersInit,
+): Promise<[z.infer<typeof WebookRequestBody> | undefined, Response | undefined]> {
+  return parseDataSafe(WebookRequestBody, request, headers);
+}
+
+async function parseDataSafe<T extends ZodType<any, any, any>>(
+  schema: T,
+  request: Request,
+  headers?: HeadersInit,
+): Promise<[z.infer<T> | undefined, Response | undefined]> {
+  let data: z.infer<T> | undefined = undefined;
+  try {
+    if (request.method === "GET") {
+      // Parse data from query parameters for GET requests
+      const url = new URL(request.url);
+      const params = Object.fromEntries(url.searchParams);
+      data = await schema.parseAsync(params);
+    } else {
+      // Parse data from request body for other types of requests
+      data = await schema.parseAsync(await request.json());
+    }
+  } catch (e: unknown) {
+    if (e instanceof ZodError) {
+      const message = e.flatten().fieldErrors;
+      return [
+        undefined,
+        Response.json(message, {
+          status: 500,
+          statusText: "Invalid request",
+          headers: headers,
+        }),
+      ];
+    }
+  }
+
+  if (!data)
+    return [
+      undefined,
+      Response.json(
+        {
+          message: "Invalid request",
+        },
+        { status: 500, statusText: "Invalid request", headers: headers },
+      ),
+    ];
+
+  return [data, undefined];
+}
+
 
 const runTypes = z.object({
   run_id: z.string(),
 });
 
+
 const runOutputTypes = z.object({
   id: z.string(),
-  status: z.enum([
-    "not-started",
-    "running",
-    "uploading",
-    "success",
-    "failed",
-    "started",
-    "queued",
-    "timeout",
-  ]),
+  status: status,
   outputs: z.array(
     z.object({
       data: z.any(),
@@ -156,7 +227,7 @@ export class ComfyDeployClient {
 
   async getWebsocketUrl({ deployment_id }: { deployment_id: string; }) {
     const url = new URL(`${this.apiBase}/websocket/${deployment_id}`);
-    
+
     return await fetch(url.href, {
       method: "GET",
       headers: {
