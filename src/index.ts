@@ -48,10 +48,13 @@ async function parseDataSafe<T extends ZodType<any, any, any>>(
       // Parse data from query parameters for GET requests
       const url = new URL(request.url);
       const params = Object.fromEntries(url.searchParams);
+      // console.log('params', params)
       data = await schema.parseAsync(params);
     } else {
       // Parse data from request body for other types of requests
-      data = await schema.parseAsync(await request.json());
+      const json = await request.json();
+      // console.log('json', json)
+      data = await schema.parseAsync(json);
     }
   } catch (e: unknown) {
     if (e instanceof ZodError) {
@@ -82,10 +85,10 @@ async function parseDataSafe<T extends ZodType<any, any, any>>(
 }
 
 
-const runTypes = z.object({
-  run_id: z.string(),
-});
-
+const runTypes = z
+  .object({
+    run_id: z.string()
+  })
 
 const runOutputTypes = z.object({
   id: z.string(),
@@ -141,12 +144,20 @@ export class ComfyDeployClient {
       cache: "no-store",
     })
       .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
         // console.log('response', response)
         return response.json()
       })
       .then((json) => {
-        // console.log('json', json)
-        return runTypes.parse(json)
+        const result = runTypes.parse(json)
+        // if (result.error || !result.run_id) {
+        //   throw new Error(result.error)
+        // }
+        return {
+          run_id: result.run_id
+        }
       })
       .catch((err) => {
         console.error('err', err);
@@ -163,7 +174,11 @@ export class ComfyDeployClient {
       },
       cache: "no-store",
     })
-      .then((response) => response.json())
+      .then(async (response) => {
+        const json = await response.json()
+        // console.log('json-get-run', json)
+        return json
+      })
       .then((json) => runOutputTypes.parse(json))
       .catch((err) => {
         console.error(err);
@@ -177,7 +192,8 @@ export class ComfyDeployClient {
     webhook?: string;
   }) {
     const runResult = await this.run(props);
-    if (!runResult) return null;
+
+    if (!runResult || !runResult.run_id) return null;
 
     // 5 minutes
     const timeout = 60 * 5;
