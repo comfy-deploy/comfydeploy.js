@@ -21,6 +21,7 @@ const runOutputs = z.array(z.object({
     images: z.array(OutputFileType).optional(),
     files: z.array(OutputFileType).optional(),
     gifs: z.array(OutputFileType).optional(),
+    text: z.array(z.string()).optional(),
   })
 }))
 
